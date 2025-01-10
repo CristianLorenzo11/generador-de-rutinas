@@ -126,6 +126,17 @@
     filter: drop-shadow(0px 4px 6px rgba(5, 5, 5, 0.7)); /* Sombra blanca suave */
         
 }
+#modal-content p.notice {
+    background-color: #f8d406; /* Fondo rojo claro */
+    color: #f70920; /* Color de texto rojo oscuro */
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #e7eb0e; /* Borde rojo claro */
+    font-size: 0.6em;
+    font-weight: bold;
+    margin-top: 10px;
+    text-align: center;
+}
 
     </style>
 </head>
@@ -134,8 +145,8 @@
         <div id="modal-content">
             <img src="LUX GYM (2).png" alt="Logo del Gimnasio">
             <p>¡Bienvenidos al Generador de Rutinas!</p>
+            <p class="notice">Este generador ofrece rutinas estándar,<br> En caso de lesiones o enfermedades, por favor solicita una rutina personalizada o una adaptación de los ejercicios a tu profesor.</p>
             <button class="modal-btn" onclick="closeModal()">Iniciar</button>
-
         </div>
     </div>
 
