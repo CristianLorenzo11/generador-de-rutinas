@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Rutinas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #080808;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        select, input, button:not(#modal button) {
+    width: 100%; /* Este ancho ya no se aplicará al botón del modal */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+        button {
+            background-color: #636664;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .routine {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+        }
+        .routine-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .routine-item img {
+            width: 130px;
+            height: 130px;
+            margin-right: 10px;
+            border-radius: 5px;
+        }
+        .warning {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #ffc107;
+            border-radius: 4px;
+            color: #856404;
+            font-weight: bold;
+        }
+        #modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color:black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            color: white;
+            font-size: 1.5em;
+        }
+        #modal-content {
+            text-align: center;
+        }
+        #modal img {
+            max-width: 200px;
+            margin-bottom: 20px;
+            border-radius: 50%;
+            filter: drop-shadow(0px 4px 6px rgba(255, 255, 255, 0.7)); /* Sombra blanca suave */
+        }    
+        #modal button {
+            padding: 5px 10px;
+            font-size: 0.7em;
+            color: white;
+            background-color: #636664;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            animation: blink 1.5s infinite;
+            filter: drop-shadow(0px 4px 6px rgba(255, 255, 255, 0.7)); /* Sombra blanca suave */
+        }
+        #modal button:hover {
+            background-color: #060706;
+        }
+        @keyframes blink {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+        .logo {
+    display: block; /* Asegura que la imagen sea tratada como un bloque */
+    margin: 0 auto 20px; /* Centra horizontalmente y agrega un margen inferior */
+    max-width: 150px; /* Ajusta el tamaño máximo del logo */
+    height: auto; /* Mantiene la proporción de la imagen */
+}
+
+    </style>
+</head>
+<body>
+    <div id="modal">
+        <div id="modal-content">
+            <img src="LUX GYM (2).png" alt="Logo del Gimnasio">
+            <p>¡Bienvenidos al Generador de Rutinas!</p>
+            <button class="modal-btn" onclick="closeModal()">Ir al Generador</button>
+
+        </div>
+    </div>
+
+    <div class="container">
+        <img src="LUX GYM (2).png" alt="Logo" class="logo">
+        <h1>Generador de Rutinas</h1>
+        <div class="form-group">
+            <label for="muscleGroup">Elige el Grupo muscular</label>
+            <select id="muscleGroup">
+                <option value="pecho">💪 Pecho</option>
+                <option value="espalda">🏋️‍♀️ Espalda</option>
+                <option value="piernas">🦵 Piernas</option>
+                <option value="biceps">💪 Biceps</option>
+                <option value="triceps">💪 Triceps</option>
+                <option value="hombros">💪🏼 Hombros</option>
+                <option value="gluteos">🍑 Glúteos</option>
+                <option value="pecho_biceps">💪 Pecho + Biceps</option>
+                <option value="espalda_triceps">🏋️‍♀️ Espalda + Triceps</option>
+                <option value="piernas_hombros">🦵 Piernas + Hombros</option>
+                <option value="pecho_triceps">💪 Pecho + Triceps</option>
+                <option value="espalda_biceps">🏋️‍♀️ Espalda + Biceps</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="timeAvailable">Tiempo disponible para entrenar</label>
+            <select id="timeAvailable">
+                <option value="45">⏳ 45 minutos</option>
+                <option value="60">🕐 60 minutos</option>
+                <option value="90">⏰ Más de 60 minutos</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="energyLevel">¿Cual es tu Nivel de energía hoy?</label>
+            <select id="energyLevel">
+                <option value="baja">⚡ Baja</option>
+                <option value="media">🔋 Media</option>
+                <option value="alta">💪 Alta</option>
+            </select>
+        </div>
+        
+        <button onclick="generateRoutine()">Generar Rutina</button>
+
+        <div id="warningMessage" class="warning" style="display:none;"></div>
+        <div id="routineOutput" class="routine" style="display:none;"></div>
+    </div>
+
+    <script>
+        function generateRoutine() {
+            const muscleGroup = document.getElementById('muscleGroup').value;
+            const timeAvailable = parseInt(document.getElementById('timeAvailable').value);
+            const energyLevel = document.getElementById('energyLevel').value;
+
+            const routines = {
+                pecho: [
+                    { name: "Flexiones", img: "flexiones de brazos completas.gif" },
+                    { name: "Press de banca", img: "PECHO-PLANO.gif" },
+                    { name: "Aperturas con mancuernas", img: "APERTURA EN PLANO CON M.gif" },
+                    { name: "Press inclinado", img: "PRES-INCLINADO.gif" },
+                    { name: "Cable crossover", img: "CROSS-OVER.gif" },
+                    { name: "Fondos en paralelas", img: "FONDO-PARALELAS.gif" },
+                    { name: "Pull-over", img: "pullover.gif" }
+                ],
+                espalda: [
+                    { name: "Remo Bajo", img: "REMO BAJO G.gif" },
+                    { name: "Jalón al pecho", img: "jalon al pecho, dorsalera.gif" },
+                    { name: "Remo con barra", img: "REMO-BARRA.gif" },
+                    { name: "Pullover", img: "pullover.gif" },
+                    { name: "Dominadas", img: "DOMINADAS.gif" },
+                    { name: "Remo con mancuernas", img: "SERRUCHO-MANCUERNAS.gif" },
+                    { name: "Peso muerto", img: "PESO-MUERTO.gif" },
+                    { name: "Face pulls", img: "FACE-POOL.gif" }
+                ],
+                piernas: [
+                    { name: "Sentadillas", img: "SENTADILLAS HOMBRE.gif" },
+                    { name: "Prensa de piernas", img: "PRENSA-.gif" },
+                    { name: "Estocadas", img: "estocada.gif" },
+                    { name: "Peso muerto rumano", img: "PESO-MUERTO.gif" },
+                    { name: "Elevación de talones", img: "gemelos parado.gif" },
+                    { name: "Bulgaras", img: "BULGARA.gif" },
+                    { name: "Sillon de Cuadriceps", img: "Cuadriceps.gif" },
+                    { name: "Curl femoral", img: "femorales 2piernas.gif" }
+                ],
+                biceps: [
+                    { name: "Curl de bíceps", img: "biceps-mancuerna.gif" },
+                    { name: "Curl martillo", img: "martillo sentado.gif" },
+                    { name: "Curl concentrado", img: "CURL CONCENTRADO.gif" },
+                    { name: "Curl con barra", img: "curl de biceps con barra ez.gif" },
+                    { name: "Curl en banco scot", img: "CURL A UN BRAZO EN SCOT.gif" }
+                ],
+                triceps: [
+                    { name: "Extensiones de tríceps", img: "triceps en polea con soga.gif" },
+                    { name: "Patada de tríceps", img: "patada-triceps.gif" },
+                    { name: "Press francés", img: "TRICEPS CON BARRA.gif" },
+                    { name: "Rompe Coco", img: "ROMPE COCO CON W.gif" },
+                    { name: "Fondos de tríceps", img: "fondo de triceps en banco.gif" },
+                    { name: "Extensiones de tríceps a un brazo con mancuerna", img: "TRICEPS A UN BRAZO.gif" }
+                ],
+                hombros: [
+                    { name: "Press militar", img: "pres-hombros.gif" },
+                    { name: "Elevaciones laterales", img: "vuelo lateral parado.gif" },
+                    { name: "Elevaciones frontales", img: "VUELO FRONTAL.gif" },
+                    { name: "Face pulls", img: "FACE-POOL.gif" },
+                    { name: "Encogimientos", img: "trapecio.gif" },
+                    { name: "Press Arnold", img: "press-arnol.gif" },
+                    { name: "Elevaciones posteriores", img: "posteriores con mancuernas.gif" },
+                    { name: "Vuelo inclinado", img: "vuelo lateral inclinado.gif" }
+                ],
+                gluteos: [
+                    { name: "Sentadillas", img: "SENTADILLAS HOMBRE.gif" },
+                    { name: "Hitp thrust con barra", img: "puente con barra.gif" },
+                    { name: "Patada de gluteos (en colchoneta o poleas)", img: "GLUTEOS PATADA.gif" },
+                    { name: "Peso muerto rumano", img: "PESO-MUERTO.gif" }  ,  
+                    { name: "Bulgaras", img: "BULGARA.gif" },
+                    { name: "Sumo", img: "sumo-squat.gif" },
+                    { name: "Estocadas", img: "estocada.gif" }
+                ]
+                    
+            };
+
+            const repetitions = {
+                baja: "8-10 repeticiones por ejercicio",
+                media: "10-12 repeticiones por ejercicio",
+                alta: "12-15 repeticiones por ejercicio"
+            };
+
+            const restTimes = {
+                45: { baja: "90 segundos", media: "60 segundos", alta: "30 segundos" },
+                60: { baja: "120 segundos", media: "90 segundos", alta: "60 segundos" },
+                90: { baja: "150 segundos", media: "120 segundos", alta: "90 segundos" }
+            };
+
+            const timeToExercises = {
+                45: { baja: 3, media: 4, alta: 5 },
+                60: { baja: 4, media: 6, alta: 7 },
+                90: { baja: 6, media: 7, alta: 9 }
+            };
+
+            let selectedRoutines = [];
+
+if (muscleGroup === "espalda_triceps") {
+    const exercisesPerGroup = Math.max(2, Math.floor(timeToExercises[timeAvailable][energyLevel] / 2)); 
+    selectedRoutines = [
+        ...routines.espalda.slice(0, exercisesPerGroup),
+        ...routines.triceps.slice(0, exercisesPerGroup)
+    ];
+} else if (muscleGroup === "pecho_biceps") {
+    const exercisesPerGroup = Math.max(2, Math.floor(timeToExercises[timeAvailable][energyLevel] / 2)); 
+    selectedRoutines = [
+        ...routines.pecho.slice(0, exercisesPerGroup),
+        ...routines.biceps.slice(0, exercisesPerGroup)
+    ];
+} else if (muscleGroup === "piernas_hombros") {
+    const exercisesPerGroup = Math.max(2, Math.floor(timeToExercises[timeAvailable][energyLevel] / 2)); 
+    selectedRoutines = [
+        ...routines.piernas.slice(0, exercisesPerGroup),
+        ...routines.hombros.slice(0, exercisesPerGroup)
+    ];
+} else if (muscleGroup === "pecho_triceps") {  
+    const exercisesPerGroup = Math.max(2, Math.floor(timeToExercises[timeAvailable][energyLevel] / 2)); 
+    selectedRoutines = [
+        ...routines.pecho.slice(0, exercisesPerGroup),
+        ...routines.triceps.slice(0, exercisesPerGroup)
+    ];
+} else if (muscleGroup === "espalda_biceps") {  // Nueva condición para Espalda + Bíceps
+    const exercisesPerGroup = Math.max(2, Math.floor(timeToExercises[timeAvailable][energyLevel] / 2)); 
+    selectedRoutines = [
+        ...routines.espalda.slice(0, exercisesPerGroup),
+        ...routines.biceps.slice(0, exercisesPerGroup)
+    ];
+} else {
+    selectedRoutines = routines[muscleGroup] || [];
+}
+
+
+            const warningMessage = document.getElementById('warningMessage');
+            if (energyLevel === 'baja' && timeAvailable === 90) {
+                warningMessage.textContent = "No te recomiendo entrenar tanto tiempo si tus niveles de energía son bajos.";
+                warningMessage.style.display = 'block';
+            } else {
+                warningMessage.style.display = 'none';
+            }
+
+            const exerciseCount = timeToExercises[timeAvailable][energyLevel] || 3;
+
+            const dailyRoutine = selectedRoutines.slice(0, exerciseCount).map((exercise, index) => {
+                return `<div class='routine-item'>
+                    <img src="${exercise.img}" alt="${exercise.name}">
+                    <div>
+                        <strong>${index + 1}. ${exercise.name}</strong><br>
+                        ${repetitions[energyLevel]}
+                    </div>
+                </div>`;
+            });
+
+            const restTime = restTimes[timeAvailable][energyLevel];
+
+            const routineOutput = document.getElementById('routineOutput');
+            routineOutput.innerHTML = dailyRoutine.length > 0
+                ? `<strong>Tu rutina para hoy:</strong><br>${dailyRoutine.join('')}<br><br><strong>Tiempo de descanso recomendado:</strong> ${restTime}`
+                : "<strong>No hay suficiente tiempo para generar una rutina.</strong>";
+            routineOutput.style.display = 'block';
+        }
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            modal.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
