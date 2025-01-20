@@ -283,6 +283,16 @@
             const energyLevel = document.getElementById('energyLevel').value;
 
             const routines = {
+                abdominales: [
+                    { name: "Crunch (Abdominales cortos)", img: "cortos.gif" },    
+                    { name: "Planchas", img: "planchas frontales.jpg" },
+                    { name: "Abdominales en banco", img: "abdo-en-maquina.gif" },
+                    { name: "Abdominales con giro", img: "abdominales con giro.gif" },
+                    { name: "Abdominales Cruzados", img: "cruzados.gif" },
+                    { name: "Oblicuos", img: "oblicuos.gif" },
+                    { name: "Crunch con peso", img: "abdomen con pesas.gif" }
+
+                ],
                 pecho: [
                     { name: "Flexiones", img: "flexiones de brazos completas.gif" },
                     { name: "Press de banca", img: "PECHO-PLANO.gif" },
@@ -428,7 +438,7 @@ if (muscleGroup === "espalda_triceps") {
 
             const routineOutput = document.getElementById('routineOutput');
             routineOutput.innerHTML = dailyRoutine.length > 0
-                ? `<strong>Tu rutina para hoy:</strong><br>${dailyRoutine.join('')}<br><br><strong>Tiempo de descanso recomendado:</strong> ${restTime}`
+                ? `<strong>Tu rutina para hoy: <br>Series recomendadas: 3 o 4 <br> </strong><br>${dailyRoutine.join('')}<br><br><strong>Tiempo de descanso recomendado:</strong> ${restTime}`
                 : "<strong>No hay suficiente tiempo para generar una rutina.</strong>";
             routineOutput.style.display = 'block';
         }
