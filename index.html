@@ -239,6 +239,7 @@
         <div class="form-group">
             <label for="muscleGroup">Elige el Grupo muscular</label>
             <select id="muscleGroup">
+                <option value="abdominales">💪 Abdominales</option>
                 <option value="pecho">💪 Pecho</option>
                 <option value="espalda">🏋️‍♀️ Espalda</option>
                 <option value="piernas">🦵 Piernas</option>
@@ -285,7 +286,6 @@
             const routines = {
                 abdominales: [
                     { name: "Crunch (Abdominales cortos)", img: "cortos.gif" },    
-                    { name: "Planchas", img: "planchas frontales.jpg" },
                     { name: "Abdominales en banco", img: "abdo-en-maquina.gif" },
                     { name: "Abdominales con giro", img: "abdominales con giro.gif" },
                     { name: "Abdominales Cruzados", img: "cruzados.gif" },
@@ -360,10 +360,15 @@
             };
 
             const repetitions = {
-                baja: "8-10 repeticiones por ejercicio",
-                media: "10-12 repeticiones por ejercicio",
-                alta: "12-15 repeticiones por ejercicio"
-            };
+            baja: "8-10 repeticiones por ejercicio",
+            media: "10-12 repeticiones por ejercicio",
+            alta: "12-15 repeticiones por ejercicio",
+            abdominales: {
+                baja: "15-20 repeticiones por ejercicio",
+                media: "20-25 repeticiones por ejercicio",
+                alta: "25-30 repeticiones por ejercicio"
+            }
+        };;
 
             const restTimes = {
                 45: { baja: "90 segundos", media: "60 segundos", alta: "30 segundos" },
@@ -379,7 +384,10 @@
 
             let selectedRoutines = [];
 
-if (muscleGroup === "espalda_triceps") {
+            if (muscleGroup === "abdominales") {
+            const exerciseCount = timeToExercises[timeAvailable][energyLevel] || 3;
+            selectedRoutines = routines.abdominales.slice(0, exerciseCount);
+            }if (muscleGroup === "espalda_triceps") {
     const exercisesPerGroup = Math.max(2, Math.floor(timeToExercises[timeAvailable][energyLevel] / 2)); 
     selectedRoutines = [
         ...routines.espalda.slice(0, exercisesPerGroup),
@@ -413,7 +421,6 @@ if (muscleGroup === "espalda_triceps") {
     selectedRoutines = routines[muscleGroup] || [];
 }
 
-
             const warningMessage = document.getElementById('warningMessage');
             if (energyLevel === 'baja' && timeAvailable === 90) {
                 warningMessage.textContent = "No te recomiendo entrenar tanto tiempo si tus niveles de energía son bajos.";
@@ -425,14 +432,17 @@ if (muscleGroup === "espalda_triceps") {
             const exerciseCount = timeToExercises[timeAvailable][energyLevel] || 3;
 
             const dailyRoutine = selectedRoutines.slice(0, exerciseCount).map((exercise, index) => {
-                return `<div class='routine-item'>
-                    <img src="${exercise.img}" alt="${exercise.name}">
-                    <div>
-                        <strong>${index + 1}. ${exercise.name}</strong><br>
-                        ${repetitions[energyLevel]}
-                    </div>
-                </div>`;
-            });
+            const reps =
+                muscleGroup === "abdominales"
+                    ? repetitions.abdominales[energyLevel]
+                    : repetitions[energyLevel];
+            return `<div class='routine-item'>
+                <img src="${exercise.img}" alt="${exercise.name}">
+                <div>
+                    <strong>${index + 1}. ${exercise.name}</strong><br>
+                    ${reps}
+                </div>
+            </div>`;            });
 
             const restTime = restTimes[timeAvailable][energyLevel];
 
